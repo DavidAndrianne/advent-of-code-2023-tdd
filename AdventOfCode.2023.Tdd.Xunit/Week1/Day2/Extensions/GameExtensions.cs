@@ -1,10 +1,5 @@
-﻿using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Domain
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week1.Day2.Extensions;
 

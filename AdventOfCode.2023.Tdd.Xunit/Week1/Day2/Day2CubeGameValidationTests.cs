@@ -1,5 +1,4 @@
 ﻿using AdventOfCode2023.Tdd.Xunit.Util;
-using AdventOfCode2023.Tdd.Xunit.Week1.Day1.Extensions;
 using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Domain;
 using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Extensions;
 using FluentAssertions;
