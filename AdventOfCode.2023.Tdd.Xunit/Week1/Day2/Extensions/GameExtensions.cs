@@ -1,4 +1,4 @@
-﻿using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Domain
+﻿using AdventOfCode2023.Tdd.Xunit.Week1.Day2.Domain;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week1.Day2.Extensions;
