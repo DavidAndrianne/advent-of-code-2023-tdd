@@ -8,7 +8,7 @@ public class ScratchCardWinner
 
     public ScratchCardWinner(IEnumerable<ScratchCard> scratchCards)
     {
-        ScratchCardCounts = scratchCards.ToDictionary(x => x.Id-1, y => 1);
+        ScratchCardCounts = scratchCards.ToDictionary(x => x.Id, y => 1);
         scoreCards(scratchCards.ToArray());
     }
 
@@ -17,7 +17,7 @@ public class ScratchCardWinner
         for(var i = 0; i < scratchCards.Count(); i++)
         {
             var card = scratchCards[i];
-            for(var j = 0; j < card.WinningEntriesCount; j++) ScratchCardCounts[card.Id+j] += ScratchCardCounts[i];
+            for(var j = 1; j < card.WinningEntriesCount+1; j++) ScratchCardCounts[card.Id+j] += ScratchCardCounts[card.Id];
         }
     }
 }
