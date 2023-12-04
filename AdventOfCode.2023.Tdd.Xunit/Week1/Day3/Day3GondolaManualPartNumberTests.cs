@@ -1,5 +1,4 @@
 ﻿using AdventOfCode2023.Tdd.Xunit.Util;
-using AdventOfCode2023.Tdd.Xunit.Week1.Day3.Carthesians;
 using AdventOfCode2023.Tdd.Xunit.Week1.Day3.Extensions;
 using FluentAssertions;
 using System.Diagnostics;
