@@ -21,4 +21,6 @@ public class AlmanacMapSource
     {
         Name = name;
     }
+
+    public override string ToString() => Name;
 }

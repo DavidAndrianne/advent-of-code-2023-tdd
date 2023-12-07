@@ -2,5 +2,5 @@
 
 public class Light
 {
-    public int Id { get; set; }
+    public double Id { get; set; }
 }

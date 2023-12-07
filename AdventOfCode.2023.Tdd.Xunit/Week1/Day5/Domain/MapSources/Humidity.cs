@@ -2,5 +2,5 @@
 
 public class Humidity
 {
-    public int Id { get; set; }
+    public double Id { get; set; }
 }

@@ -1,10 +1,12 @@
 ﻿using AdventOfCode2023.Tdd.Xunit.Util;
+using AdventOfCode2023.Tdd.Xunit.Week1.Day5.Domain;
+using AdventOfCode2023.Tdd.Xunit.Week1.Day5.InputParsers;
 using FluentAssertions;
 using System.Diagnostics;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week1.Day5;
 
-public class Day6Tests
+public class Day5Tests
 {
     public readonly string ExampleInput = @"seeds: 79 14 55 13
 
@@ -43,48 +45,84 @@ humidity-to-location map:
     [Fact]
     public void ParseAlmanac_WithValidInput_ReturnsCorrectValues()
     {
-        // Act & Act
+        // Arrange & Act
         var almanac = ExampleInput.ParseAlmanac();
 
         // Assert
-        //card.Id.Should().Be(expectedId);
-        //card.WinningNumbers.Should().BeEquivalentTo(expectedWinningNumbers);
-        //card.Entries.Should().BeEquivalentTo( expectedEntries);
+        almanac.Seeds.Select(x => x.Id).ToArray().Should().BeEquivalentTo([79, 14, 55, 13]);
+
+        almanac.Entries.Count().Should().Be(AlmanacMapSource.All.Count()-1, "all sources are present");
+
+        almanac.Entries[AlmanacMapSource.Seed.Name].Ranges.Count().Should().Be(2, "there are 2 ranges");
+        almanac.Entries[AlmanacMapSource.Seed.Name].Ranges.First().ToString().Should().Be(new AlmanacEntryRange(98, 50, 2).ToString());
+        almanac.Entries[AlmanacMapSource.Seed.Name].Ranges.Last().ToString().Should().Be(new AlmanacEntryRange(50, 52, 48).ToString());
     }
 
-    public static object[][] ExampleDataset = [
-        // todo
-        []
-        ];
+    public static object[][] ExampleTargetIndexDataset = [
+        [0, 0, "not within range"],
+        [49, 49, "not within range"],
+        [50, 52, "source to target index"],
+        [51, 53, "source to target within range2"],
+        [79, 81, "source to target within range2"],
+        [96, 98, "source to target index range1"],
+        [97, 99, "source to target index range1"]
+    ];
     [Theory]
-    [MemberData(nameof(ExampleDataset))]
-    public void ScratchCard_WithValidInput_CorrectSum(string line, object expected, string because)
+    [MemberData(nameof(ExampleTargetIndexDataset))]
+    public void AlmanacEntry_GetTargetIndexForSourceIndex_ReturnsCorrectIndex(int sourceIndex, int expectedTargetIndex, string because)
     {
         // Arrange
-        var todo = "";//line.ParseTodo();
+        var tinyAlmanac = @"seeds: 79 14 55 13
+
+seed-to-soil map:
+50 98 2
+52 50 48";
+        var almanac = tinyAlmanac.ParseAlmanac();
+        var sut = almanac.Entries[AlmanacMapSource.Seed.Name];
 
         // Act
-        //var score = todo.Score;
+        var targetIndex = sut.GetTargetIndexForSourceIndex(sourceIndex);
 
         // Assert
-        //score.Should().Be(expectedScore, because);
+        targetIndex.Should().Be(expectedTargetIndex, because);
+    }
+
+    public static object[][] ExampleLocationTargetIndexDataset = [
+        [79, 82, "this is the nearest location"],
+        [14, 43, "this is the nearest location"],
+        [55, 86, "this is the nearest location"],
+        [13, 35, "this is the nearest location"]
+    ];
+    [Theory]
+    [MemberData(nameof(ExampleLocationTargetIndexDataset))]
+    public void Almanac_ConsultWhereToPlant_ReturnsNearestLocationIndex(int seedI, int locationI, string because)
+    {
+        //Arrange
+        var seed = new Seed(seedI);
+        var sut = ExampleInput.ParseAlmanac();
+
+        // Act
+        var location = sut.ConsultWhereToPlant(seed);
+
+        // Assert
+        location.Id.Should().Be(locationI, because);
     }
 
     [Fact]
-    public void Todo_Todo_Part1()
+    public void Almanac_ConsultWhereToPlant_Part1()
     {
         // Arrange
-        var todos = InputReader.ReadLinesForDay(5)
-            .Select(x => x/*.ParseTodo()*/)
-            .ToArray();
+        var almanac = InputReader.ReadRawTextForDay(5).ParseAlmanac();
 
         // Act
-        //var sum = todos.Select(x => x.Score).Sum();
+        var minLocation = almanac.Seeds
+            .Select(x => almanac.ConsultWhereToPlant(x).Id)
+            .Min();
 
         //// Assert
-        //Debug.WriteLine($"Total scrathtodos score sum:{sum}");
+        Debug.WriteLine($"MinLocation :{minLocation}");
 
-        //sum.Should().BeGreaterThan(0);
-        //sum.Should().BeLessThan(100000);
+        minLocation.Should().BeGreaterThan(0);
+        minLocation.Should().BeLessThan(100000);
     }
 }

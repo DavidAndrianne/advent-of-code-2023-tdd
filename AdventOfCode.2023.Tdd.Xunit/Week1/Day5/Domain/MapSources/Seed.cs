@@ -2,5 +2,9 @@
 
 public class Seed
 {
-    public int Id { get; set; }
+    public double Id { get; set; }
+
+    public Seed(double id) => Id = id;
+
+    public override string ToString() => Id.ToString();
 }
