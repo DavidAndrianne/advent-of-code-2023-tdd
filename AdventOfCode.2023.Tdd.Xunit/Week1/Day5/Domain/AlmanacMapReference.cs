@@ -7,12 +7,11 @@ public class AlmanacMapReference
     public double TargetIndex { get; set; }
     public List<AlmanacMapReference> PriorReferences { get; set; }
 
-    public AlmanacMapReference(AlmanacEntry entry, double sourceIndex, double targetIndex, List<AlmanacMapReference>? references)
+    public AlmanacMapReference(AlmanacEntry entry, double sourceIndex, double targetIndex)
     {
         Entry = entry;
         SourceIndex = sourceIndex;
         TargetIndex = targetIndex;
-        PriorReferences = references ?? new List<AlmanacMapReference>();
     }
 
     public override string ToString()

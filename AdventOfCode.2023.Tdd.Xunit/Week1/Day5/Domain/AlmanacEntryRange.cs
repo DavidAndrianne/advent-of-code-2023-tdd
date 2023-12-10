@@ -1,5 +1,4 @@
-﻿
-namespace AdventOfCode2023.Tdd.Xunit.Week1.Day5.Domain;
+﻿namespace AdventOfCode2023.Tdd.Xunit.Week1.Day5.Domain;
 
 public class AlmanacEntryRange {
     public double SourceRangeStartIndex { get; set; }
@@ -17,4 +16,6 @@ public class AlmanacEntryRange {
 
     public override string ToString()
         => $"{SourceRangeStartIndex} => {TargetRangeStartIndex} .. {RangeLength}";
+
+    public Range[] MapRanges(Range r) => [r];
 }

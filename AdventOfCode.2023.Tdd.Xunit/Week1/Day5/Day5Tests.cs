@@ -3,6 +3,7 @@ using AdventOfCode2023.Tdd.Xunit.Week1.Day5.Domain;
 using AdventOfCode2023.Tdd.Xunit.Week1.Day5.InputParsers;
 using FluentAssertions;
 using System.Diagnostics;
+using Range = AdventOfCode2023.Tdd.Xunit.Week1.Day5.Domain.Range;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week1.Day5;
 
@@ -119,10 +120,108 @@ seed-to-soil map:
             .Select(x => almanac.ConsultWhereToPlant(x).Id)
             .Min();
 
-        //// Assert
+        // Assert
         Debug.WriteLine($"MinLocation :{minLocation}");
 
         minLocation.Should().BeGreaterThan(0);
         minLocation.Should().BeLessThan(100000);
+    }
+
+
+    [Fact]
+    public void RangeEquals_WithEqualRange_IsEqual()
+    {
+        // Arrange
+        var r1 = new Range(0, 1);
+        var r2 = new Range(0, 1);
+
+        // Act
+        var equals2 = r1.Equals(r2);
+
+        // Assert
+        equals2.Should().BeTrue("because their start & end are identical");
+    }
+    
+    [Fact]
+    public void RangeEquals_WithNull_IsNotEqual()
+    {
+        // Arrange
+        var r1 = new Range(0, 1);
+
+        // Act
+        var equals2 = r1.Equals(null);
+
+        // Assert
+        equals2.Should().BeFalse("because range is null");
+    }
+
+    public static object[][] RangeOverlapData = [
+        [new Range(0, 10), new Range(0, 10), new Range(0, 10), "the overlap is identical as the ranges are equal"],
+        [new Range(0, 10), new Range(0, 15), new Range(0, 10), "range2 overlaps range1"],
+        [new Range(10, 15), new Range(9, 16), new Range(10, 15), "range2 overlaps range1"],
+        [new Range(10, 20), new Range(15, 20), new Range(15, 20), "range1 overlaps range2"],
+        [new Range(10, 20), new Range(21, 30), null, "no overlap"],
+        [new Range(101, 120), new Range(120, 130), new Range(120, 120), "teeny overlap end"],
+        [new Range(101, 120), new Range(101, 101), new Range(101, 101), "teeny overlap start"],
+    ];
+    [Theory]
+    [MemberData(nameof(RangeOverlapData))]
+    public void Range_GetOverlap_ReturnsOverlap(Range range1, Range range2, Range? expected, string because)
+    {
+        // Arrange & Act
+        var isOverlapping = range1.IsOverlapping(range2);
+        var overlap = range1.GetOverlappingRange(range2);
+
+        // Assert
+        isOverlapping.Should().Be(expected != null, "range1 & range2 overlap");
+        if (expected == null) return;
+        
+        overlap.Start.Should().Be(expected.Start, because);
+        overlap.End.Should().Be(expected.End, because);
+    }
+
+    public static object[][] RangeSubtractData = [
+        [new Range(0, 10), new Range(0, 10), null, null, "the ranges are equal"],
+        [new Range(0, 10), new Range(0, 15), null, new Range(11, 15), "range2 overlaps range1"],
+        [new Range(10, 15), new Range(9, 16), new Range(9, 9), new Range(16, 16), "range2 overlaps range1"],
+        [new Range(10, 20), new Range(15, 20), new Range(10, 14), null, "range1 overlaps range2"],
+        [new Range(10, 20), new Range(21, 30), new Range(10, 20), new Range(21, 30), "no overlap"],
+        [new Range(101, 120), new Range(120, 130), new Range(101, 119), new Range(121, 130), "teeny overlap end"],
+        [new Range(101, 120), new Range(101, 101), null, new Range(102, 120), "teeny overlap start"],
+    ];
+    [Theory]
+    [MemberData(nameof(RangeSubtractData))]
+    public void Range_Subtract_ReturnsNonOverlap(Range range1, Range range2, Range? expected1, Range? expected2, string because)
+    {
+        // Arrange & Act
+        var overlap = range1.Subtract(range2);
+
+        // Assert
+        if(expected1 != null)
+        {
+            overlap.part1.Should().NotBeNull(because);
+            overlap.part1.Start.Should().Be(expected1.Start, because);
+            overlap.part1.End.Should().Be(expected1.End, because);
+        }
+
+        if (expected2 != null) {
+            overlap.part2.Should().NotBeNull(because);
+            overlap.part2.Start.Should().Be(expected2.Start, because);
+            overlap.part2.End.Should().Be(expected2.End, because);
+        }
+    }
+
+    [Fact]
+    public void Almanac_ConsultWhereToPlant_Part2()
+    {
+        // Arrange
+        var almanac = InputReader.ReadRawTextForDay(5).ParseAlmanac();
+
+        // Act
+        var lowestLocation = almanac.ConsultWhereToPlantRanges();
+
+        // Assert
+        lowestLocation.Id.Should().BeGreaterThan(0);
+        lowestLocation.Id.Should().BeLessThan(1549152);
     }
 }
