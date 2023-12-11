@@ -4,7 +4,7 @@ public static class InputReader
 {
     public static string[] ReadLinesForDay(int dayNumber)
     {
-        var weekNumber = dayNumber / 7 + 1;
+        var weekNumber = dayNumber == 7 ? 1 : dayNumber / 7 + 1;
         return File.ReadAllLines($"Week{weekNumber}/Day{dayNumber}/Input.txt");
     }
 
