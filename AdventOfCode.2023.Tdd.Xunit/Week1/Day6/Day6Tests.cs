@@ -1,58 +1,91 @@
 ﻿using AdventOfCode2023.Tdd.Xunit.Util;
 using FluentAssertions;
 using System.Diagnostics;
+using AdventOfCode2023.Tdd.Xunit.Week1.Day6.InputParsers;
+using AdventOfCode2023.Tdd.Xunit.Week1.Day6.Domain;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week1.Day6;
 
 public class Day6Tests
 {
+    public static string[] SampleInput = [
+        "Time:      7  15   30",
+        "Distance:  9  40  200"
+    ];
     [Fact]
-    public void ParseTodo_WithValidInput_ReturnsCorrectScratchCard()
+    public void ParseRaces_WithValidInput_ReturnsCorrectRaces()
     {
-        // Arrange
-        var line = "todo";
-
-        // Act
-        //var todo = line.ParseTodo();
+        // Arrange & Act
+        var races = SampleInput.ParseRaces();
 
         // Assert
-        //card.Id.Should().Be(expectedId);
-        //card.WinningNumbers.Should().BeEquivalentTo(expectedWinningNumbers);
-        //card.Entries.Should().BeEquivalentTo( expectedEntries);
+        races.Count().Should().Be(3);
+        races.Select(x => x.TimeInMilliseconds).Should().BeEquivalentTo(new int[] { 7, 15, 30 });
+        races.Select(x => x.RecordDistanceInMillimeter).Should().BeEquivalentTo(new int[] { 9, 40, 200 });
     }
 
     public static object[][] ExampleDataset = [
-        // todo
+        [7, 9, 4, "there are 4 ways to beat the record"],
+        [15, 40, 8, "there are 4 ways to beat the record"],
+        [30, 200, 9, "there are 9 ways to beat the record"]
         ];
     [Theory]
     [MemberData(nameof(ExampleDataset))]
-    public void ScratchCard_WithValidInput_CorrectSum(string line, object expected, string because)
+    public void Race_CalculateTotalWaysToBeatRecord_CorrectSum(int time, int distance, int expectedTotal, string because)
     {
         // Arrange
-        var todo = "";//line.ParseTodo();
+        var race = new Race(time, distance);
 
         // Act
-        //var score = todo.Score;
+        var totalWins = race.CalculateTotalWaysToBeatRecord();
 
         // Assert
-        //score.Should().Be(expectedScore, because);
+        totalWins.Should().Be(expectedTotal, because);
     }
 
     [Fact]
-    public void Todo_Todo_Part1()
+    public void Race_CalculateTotalWaysToBeatRecord_Part1()
     {
         // Arrange
-        var todos = InputReader.ReadLinesForDay(6)
-            .Select(x => x/*.ParseTodo()*/)
-            .ToArray();
+        var races = InputReader.ReadLinesForDay(6)
+            .ParseRaces();
 
         // Act
-        //var sum = todos.Select(x => x.Score).Sum();
+        var total = races.Select(x => x.CalculateTotalWaysToBeatRecord())
+            .Aggregate((x,y) => x*y);
 
         //// Assert
-        //Debug.WriteLine($"Total scrathtodos score sum:{sum}");
+        Debug.WriteLine($"Total multiplied ways to win per race:{total}");
 
-        //sum.Should().BeGreaterThan(0);
-        //sum.Should().BeLessThan(100000);
+        total.Should().BeGreaterThan(0);
+        total.Should().BeLessThan(100000);
+    }
+
+    [Fact]
+    public void ParseRaces_WithValidInput_ReturnsSingleRace()
+    {
+        // Arrange & Act
+        var race = SampleInput.ParseSingleRace();
+
+        // Assert
+        race.TimeInMilliseconds.Should().Be(71530);
+        race.RecordDistanceInMillimeter.Should().Be(940200);
+    }
+
+    [Fact]
+    public void Race_CalculateTotalWaysToBeatRecord_Part2()
+    {
+        // Arrange
+        var race = InputReader.ReadLinesForDay(6)
+            .ParseSingleRace();
+
+        // Act
+        var total = race.CalculateTotalWaysToBeatRecord2();
+
+        // Assert
+        Debug.WriteLine($"Total multiplied ways to win per race:{total}");
+
+        total.Should().BeGreaterThan(35865984);
+        total.Should().BeLessThan(100000);
     }
 }
