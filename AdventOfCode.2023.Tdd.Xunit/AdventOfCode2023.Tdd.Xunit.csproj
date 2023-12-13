@@ -46,10 +46,13 @@
     <None Update="Week1\Day7\Input.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Week2\Day8\Input.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Week2\" />
+    <Folder Include="Week2\Day9\InputParsers\" />
   </ItemGroup>
 
 </Project>
