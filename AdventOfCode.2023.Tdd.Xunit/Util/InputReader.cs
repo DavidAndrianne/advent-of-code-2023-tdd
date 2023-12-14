@@ -2,15 +2,21 @@
 
 public static class InputReader
 {
-    public static string[] ReadLinesForDay(int dayNumber)
-    {
-        var weekNumber = dayNumber == 7 ? 1 : dayNumber / 7 + 1;
-        return File.ReadAllLines($"Week{weekNumber}/Day{dayNumber}/Input.txt");
-    }
+    public static string[] ReadLinesForDay(int dayNumber) 
+        => File.ReadAllLines(GetPathForDay(dayNumber));
 
-    public static string ReadRawTextForDay(int dayNumber)
+    public static string ReadRawTextForDay(int dayNumber) 
+        => File.ReadAllText(GetPathForDay(dayNumber));
+
+    public static char[][] ReadCharGrid(int dayNumber) 
+        => File.ReadAllText(GetPathForDay(dayNumber))
+            .Split($"{Environment.NewLine}")
+            .Select(x => x.ToArray())
+            .ToArray();
+
+    private static string GetPathForDay(int dayNumber)
     {
         var weekNumber = dayNumber / 7 + 1;
-        return File.ReadAllText($"Week{weekNumber}/Day{dayNumber}/Input.txt");
+        return $"Week{weekNumber}/Day{dayNumber}/Input.txt";
     }
 }
