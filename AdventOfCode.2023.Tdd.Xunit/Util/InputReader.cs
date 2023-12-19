@@ -16,7 +16,7 @@ public static class InputReader
 
     private static string GetPathForDay(int dayNumber)
     {
-        var weekNumber = dayNumber / 7 + 1;
+        var weekNumber = (int)Math.Ceiling(dayNumber / 7M);
         return $"Week{weekNumber}/Day{dayNumber}/Input.txt";
     }
 }

@@ -2,11 +2,6 @@
 using AdventOfCode2023.Tdd.Xunit.Week2.Day13.Domain;
 using AdventOfCode2023.Tdd.Xunit.Week2.Day13.InputParsers;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2023.Tdd.Xunit.Week2.Day13;
 

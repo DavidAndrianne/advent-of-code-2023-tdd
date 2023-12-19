@@ -29,7 +29,7 @@ public static class LavaIslandObservationParseExtensions
         return result;
     }
 
-    private static bool IsEmpty(this char[] input) => input.Length == 0 || input.All(x => string.IsNullOrEmpty(x.ToString()));
+    public static bool IsEmpty(this char[] input) => input.Length == 0 || input.All(x => string.IsNullOrEmpty(x.ToString()));
 
     public static char[][] ToCharGrid(this string input)
         => input.Split(Environment.NewLine)
